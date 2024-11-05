@@ -3,9 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Subscription Page</title>
+    <style>
+        .top-right-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .top-right-buttons a {
+            margin-left: 10px;
+            padding: 8px 12px;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+        }
+        .top-right-buttons a:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <!-- Category Filter Dropdown -->
+    <div class="top-right-buttons">
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Sign Out</a>
+
+            {% if user.is_staff %} <!-- Admin page -->
+                <a href="/admin/">Admin Page</a>
+            {% endif %}
+        {% endif %}
+    </div>
+<body>
     <div>
         <label for="category-filter">Filter by Category:</label>
         <select id="category-filter" onchange="filterByCategory()">
