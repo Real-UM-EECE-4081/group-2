@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('subscriptions/', include('subscriptions.urls')),
+    path('subscriptions/', include('subscriptions.urls')),  #Create subscription page url
+    path('accounts/', include('django.contrib.auth.urls')),  # Include authentication URLs
+    path('', RedirectView.as_view(url='/subscriptions/')),  #If empty just go to it (i got tired of always manually typing it)
 ]
