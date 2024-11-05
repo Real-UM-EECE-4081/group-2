@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
+    <style>
+        .login-button {
+            margin-top: 15px;
+            padding: 8px 12px;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .login-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <h2>Sign Up</h2>
-    <form method="post">
+    <form method="post" action="{% url 'signup' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Sign Up</button>
     </form>
+
+    <!-- Login Button -->
+    <p>Already have an account?</p>
+    <a href="{% url 'login' %}" class="login-button">Log In</a>
 </body>
 </html>
