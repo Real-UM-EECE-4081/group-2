@@ -14,3 +14,17 @@ def subscription_page(request):
         'subscribed_applications': subscribed_applications
     }
     return render(request, 'subscriptions/subscription_page.html', context)
+
+
+@login_required
+def subscribe(request, app_id):
+    application = get_object_or_404(Application, id=app_id)
+    Subscription.objects.get_or_create(user=request.user, application=application)
+    return redirect('subscription_page')
+
+@login_required
+def unsubscribe(request, app_id):
+    subscription = Subscription.objects.filter(user=request.user, application_id=app_id)
+    if subscription.exists():
+        subscription.delete()
+    return redirect('subscription_page')
