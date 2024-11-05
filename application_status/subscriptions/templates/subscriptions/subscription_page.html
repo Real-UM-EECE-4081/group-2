@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription Page</title>
+</head>
+<body>
+    <div style="display: flex;">
+        <!-- All Applications Panel -->
+        <div style="width: 50%; padding: 10px;">
+            <h2>All Applications</h2>
+            <ul>
+                {% for app in all_applications %}
+                    <li>
+                        {{ app.name }}
+                        {% if app not in subscribed_applications %}
+                            <a href="{% url 'subscribe' app.id %}">Subscribe</a>
+                        {% else %}
+                            <a href="{% url 'unsubscribe' app.id %}">Unsubscribe</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Subscribed Applications Panel -->
+        <div style="width: 50%; padding: 10px;">
+            <h2>Subscribed Applications</h2>
+            <ul>
+                {% for app in subscribed_applications %}
+                    <li>{{ app.name }}</li>
+                {% empty %}
+                    <li>No subscriptions yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
