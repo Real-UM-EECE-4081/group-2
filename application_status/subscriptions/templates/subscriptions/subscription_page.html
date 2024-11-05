@@ -5,7 +5,29 @@
     <title>Subscription Page</title>
 </head>
 <body>
-    <div style="display: flex;">
+    <!-- Category Filter Dropdown -->
+    <div>
+        <label for="category-filter">Filter by Category:</label>
+        <select id="category-filter" onchange="filterByCategory()">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <script>
+        function filterByCategory() {
+            const categoryId = document.getElementById("category-filter").value;
+            const url = new URL(window.location.href);
+            url.searchParams.set("category", categoryId);
+            window.location.href = url;
+        }
+    </script>
+
+    <div style="display: flex; margin-top: 20px;">
         <!-- All Applications Panel -->
         <div style="width: 50%; padding: 10px;">
             <h2>All Applications</h2>
