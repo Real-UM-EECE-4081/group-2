@@ -4,84 +4,176 @@
     <meta charset="UTF-8">
     <title>Subscription Page</title>
     <style>
+        /* Dark theme */
+        body {
+            background-color: #121212;
+            color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Top-right buttons */
         .top-right-buttons {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
         }
+
         .top-right-buttons a {
-            margin-left: 10px;
             padding: 8px 12px;
             text-decoration: none;
             background-color: #4CAF50;
             color: white;
             border-radius: 4px;
+            transition: background-color 0.3s;
         }
+
         .top-right-buttons a:hover {
             background-color: #45a049;
+        }
+
+        /* Filter dropdown */
+        label, select {
+            font-size: 16px;
+        }
+
+        select {
+            background-color: #333;
+            color: #f1f1f1;
+            border: 1px solid #555;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        /* Panels for Applications */
+        .panel {
+            background-color: #1e1e1e;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .panel h2 {
+            color: #4CAF50;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding: 8px 0;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        a.subscribe, a.unsubscribe {
+            padding: 6px 10px;
+            text-decoration: none;
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        a.subscribe {
+            background-color: #4CAF50;
+        }
+
+        a.subscribe:hover {
+            background-color: #45a049;
+        }
+
+        a.unsubscribe {
+            background-color: #f44336;
+        }
+
+        a.unsubscribe:hover {
+            background-color: #d32f2f;
         }
     </style>
 </head>
 <body>
-    <div class="top-right-buttons">
-        {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}">Sign Out</a>
-
-            {% if user.is_staff %} <!-- Admin page -->
-                <a href="/admin/">Admin Page</a>
+    <div class="container">
+        <div class="top-right-buttons">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Sign Out</a>
+                {% if user.is_staff %}
+                    <a href="/admin/">Admin Page</a>
+                {% endif %}
             {% endif %}
-        {% endif %}
-    </div>
-<body>
-    <div>
-        <label for="category-filter">Filter by Category:</label>
-        <select id="category-filter" onchange="filterByCategory()">
-            <option value="">All Categories</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
-                    {{ category.name }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <script>
-        function filterByCategory() {
-            const categoryId = document.getElementById("category-filter").value;
-            const url = new URL(window.location.href);
-            url.searchParams.set("category", categoryId);
-            window.location.href = url;
-        }
-    </script>
-
-    <div style="display: flex; margin-top: 20px;">
-        <!-- All Applications Panel -->
-        <div style="width: 50%; padding: 10px;">
-            <h2>All Applications</h2>
-            <ul>
-                {% for app in all_applications %}
-                    <li>
-                        {{ app.name }}
-                        {% if app not in subscribed_applications %}
-                            <a href="{% url 'subscribe' app.id %}">Subscribe</a>
-                        {% else %}
-                            <a href="{% url 'unsubscribe' app.id %}">Unsubscribe</a>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
         </div>
 
-        <!-- Subscribed Applications Panel -->
-        <div style="width: 50%; padding: 10px;">
-            <h2>Subscribed Applications</h2>
-            <ul>
-                {% for app in subscribed_applications %}
-                    <li>{{ app.name }}</li>
-                {% empty %}
-                    <li>No subscriptions yet.</li>
+        <div>
+            <label for="category-filter">Filter by Category:</label>
+            <select id="category-filter" onchange="filterByCategory()">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
                 {% endfor %}
-            </ul>
+            </select>
+        </div>
+
+        <script>
+            function filterByCategory() {
+                const categoryId = document.getElementById("category-filter").value;
+                const url = new URL(window.location.href);
+                url.searchParams.set("category", categoryId);
+                window.location.href = url;
+            }
+        </script>
+
+        <div style="display: flex; gap: 20px;">
+            <!-- All Applications Panel -->
+            <div class="panel" style="width: 50%;">
+                <h2>All Applications</h2>
+                <ul>
+                    {% for app in all_applications %}
+                        <li>
+                            {{ app.name }}
+                            {% if app not in subscribed_applications %}
+                                <a href="{% url 'subscribe' app.id %}" class="subscribe">Subscribe</a>
+                            {% else %}
+                                <a href="{% url 'unsubscribe' app.id %}" class="unsubscribe">Unsubscribe</a>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li>No applications available to subscribe.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Subscribed Applications Panel -->
+            <div class="panel" style="width: 50%;">
+                <h2>Subscribed Applications</h2>
+                <ul>
+                    {% for app in subscribed_applications %}
+                        <li>{{ app.name }}</li>
+                    {% empty %}
+                        <li>No subscriptions yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 </body>
