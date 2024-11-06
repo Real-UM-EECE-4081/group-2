@@ -47,15 +47,14 @@ def unsubscribe(request, app_id):
 
 def signup(request):
     if request.user.is_authenticated:
-        # Redirect logged-in users directly to the subscription page
-        return redirect('subscription_page')
+        return redirect('subscription_page') #redirect to subscription if logged in already
 
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Log in the user after signup
-            return redirect('subscription_page')  # Redirect to subscription page
+            login(request, user)  # log user in
+            return redirect('subscription_page')  # redirect to subscription
     else:
         form = UserCreationForm()
 
