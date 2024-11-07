@@ -8,13 +8,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 @login_required(login_url='signup')
 def subscription_page(request):
-    # Get all categories to display in the filter menu
     categories = Category.objects.all()
 
-    # Get the category ID from the request parameters (if any)
     category_id = request.GET.get('category')
 
-    # Filter applications based on the selected category, if any
     if category_id:
         all_applications = Application.objects.filter(category_id=category_id)
     else:
