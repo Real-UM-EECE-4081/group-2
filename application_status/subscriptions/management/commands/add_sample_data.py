@@ -3,8 +3,6 @@ from subscriptions.models import Application, Category
 import random
 
 class Command(BaseCommand):
-    help = 'Adds sample data to the Application and Category models'
-
     def handle(self, *args, **kwargs):
         categories = ["Finance", "Productivity", "Education", "Health", "Entertainment"] # Random application categories
         app_names = [f"App {i}" for i in range(1, 11)]
